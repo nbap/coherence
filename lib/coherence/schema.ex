@@ -293,6 +293,7 @@ defmodule Coherence.Schema do
         def checkpw(password, encrypted) do
           try do
             apply(Config.password_hashing_alg(), :checkpw, [password, encrypted])
+            # Bcrypt.verify_pass(password, encrypted)
           rescue
             _ -> false
           end
@@ -302,6 +303,7 @@ defmodule Coherence.Schema do
 
         def encrypt_password(password) do
           apply(Config.password_hashing_alg(), :hashpwsalt, [password])
+          # Bcrypt.hash_pwd_salt(password)
         end
 
         def validate_coherence(changeset, params) do

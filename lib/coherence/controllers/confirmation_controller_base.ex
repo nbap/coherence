@@ -25,9 +25,10 @@ defmodule Coherence.ConfirmationControllerBase do
       Request the user's email, reset the confirmation token and resend the email.
       """
       @spec new(Plug.Conn.t(), Map.t()) :: Plug.Conn.t()
-      def new(conn, _params) do
+      def new(conn, %{"confirmation" => confirmation_params}) do
         user_schema = Config.user_schema()
-        cs = Controller.changeset(:confirmation, user_schema, user_schema.__struct__)
+        user = Schemas.get_user_by_email(confirmation_params["email"])
+        cs = Controller.changeset(:confirmation, user, user_schema.__struct__)
 
         conn
         |> render(:new, email: "", changeset: cs)
